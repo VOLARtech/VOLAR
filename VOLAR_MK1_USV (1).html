@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VOLAR Marine Systems — MK-1 USV</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--navy:#0a1628;--navy-mid:#111d35;--teal:#00b4d8;--accent:#e8731a;--accent-glow:#ff8c38;--white:#f0f4f8;--grey:#8899aa;--grey-light:#c0ccda;--surface:rgba(255,255,255,0.04);--surface2:rgba(255,255,255,0.07);--border:rgba(255,255,255,0.08);--font-body:'DM Sans',sans-serif;--font-mono:'Space Mono',monospace;--font-display:'Instrument Serif',serif}
+html{scroll-behavior:smooth}
+body{background:var(--navy);color:var(--white);font-family:var(--font-body);line-height:1.65;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1rem 3rem;display:flex;justify-content:space-between;align-items:center;backdrop-filter:blur(20px);background:rgba(10,22,40,0.85);border-bottom:1px solid var(--border);transition:all .3s}
+nav.scrolled{padding:.6rem 3rem}
+.nav-logo{font-family:var(--font-mono);font-size:.85rem;letter-spacing:3px;color:var(--teal);font-weight:700}
+.nav-links{display:flex;gap:2rem}
+.nav-links a{color:var(--grey);text-decoration:none;font-size:.8rem;letter-spacing:1.5px;text-transform:uppercase;transition:color .3s}
+.nav-links a:hover{color:var(--teal)}
+.hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:6rem 2rem;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(0,180,216,0.08),transparent),radial-gradient(ellipse 60% 50% at 20% 80%,rgba(232,115,26,0.05),transparent);pointer-events:none}
+.hero-badge{display:inline-block;font-family:var(--font-mono);font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--teal);border:1px solid rgba(0,180,216,0.3);padding:.5rem 1.5rem;border-radius:100px;margin-bottom:2rem;animation:fadeUp .8s ease both}
+.hero h1{font-family:var(--font-display);font-size:clamp(3.5rem,8vw,8rem);font-weight:400;line-height:1.05;margin-bottom:.5rem;animation:fadeUp .8s .15s ease both}
+.hero h1 em{color:var(--accent);font-style:italic}
+.hero-sub{font-size:clamp(1rem,2vw,1.4rem);color:var(--grey);max-width:700px;margin:1.5rem auto 0;animation:fadeUp .8s .3s ease both}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;animation:fadeUp .8s .45s ease both;flex-wrap:wrap;justify-content:center}
+.hero-stat{text-align:center}
+.hero-stat .num{font-family:var(--font-mono);font-size:2rem;color:var(--teal);font-weight:700}
+.hero-stat .label{font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:2px;margin-top:.3rem}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);animation:bounce 2s infinite}
+.scroll-hint span{display:block;width:1px;height:40px;background:linear-gradient(to bottom,var(--teal),transparent);margin:0 auto}
+section{padding:6rem 3rem;max-width:1300px;margin:0 auto}
+.section-tag{font-family:var(--font-mono);font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--accent);margin-bottom:1rem;display:block}
+.section-title{font-family:var(--font-display);font-size:clamp(2rem,4vw,3.5rem);font-weight:400;line-height:1.15;margin-bottom:2rem}
+.section-title em{color:var(--teal);font-style:italic}
+.section-body{color:var(--grey-light);font-size:1.05rem;max-width:800px;line-height:1.8}
+.section-body+.section-body{margin-top:1rem}
+.divider{max-width:1300px;margin:0 auto;padding:0 3rem}
+.divider hr{border:none;height:1px;background:linear-gradient(to right,transparent,var(--border),transparent)}
+.feature-band{background:var(--navy-mid);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:5rem 3rem}
+.feature-band .inner{max-width:1300px;margin:0 auto}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;margin-top:2.5rem}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;transition:all .3s;position:relative;overflow:hidden}
+.card:hover{border-color:rgba(0,180,216,0.25);transform:translateY(-2px)}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--teal),var(--accent));opacity:0;transition:opacity .3s}
+.card:hover::after{opacity:1}
+.card-icon{font-size:1.8rem;margin-bottom:1rem}
+.card h3{font-size:1.1rem;font-weight:700;margin-bottom:.75rem;color:var(--white)}
+.card p{font-size:.9rem;color:var(--grey);line-height:1.7}
+.card .card-tag{font-family:var(--font-mono);font-size:.65rem;letter-spacing:2px;color:var(--teal);text-transform:uppercase;margin-top:1rem;display:block}
+.spec-table{width:100%;border-collapse:collapse;margin-top:2rem}
+.spec-table th{font-family:var(--font-mono);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--teal);text-align:left;padding:1rem 1.5rem;border-bottom:1px solid var(--border)}
+.spec-table td{padding:.85rem 1.5rem;border-bottom:1px solid var(--border);font-size:.92rem}
+.spec-table tr:hover{background:var(--surface)}
+.spec-table .label{color:var(--grey);font-weight:500}
+.spec-table .value{color:var(--white);font-weight:500}
+.spec-table .highlight{color:var(--accent);font-weight:700}
+.budget-bar{display:flex;align-items:center;gap:1rem;margin-bottom:.8rem}
+.budget-bar .bar-label{width:180px;font-size:.82rem;color:var(--grey);text-align:right;flex-shrink:0}
+.budget-bar .bar-track{flex:1;height:28px;background:var(--surface2);border-radius:4px;overflow:hidden}
+.budget-bar .bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;font-family:var(--font-mono);font-size:.72rem;color:var(--white);font-weight:700}
+.bar-fill.hull{background:linear-gradient(90deg,#1a5276,#2e86c1)}.bar-fill.prop{background:linear-gradient(90deg,#1a5276,#2874a6)}.bar-fill.power{background:linear-gradient(90deg,#7d3c98,#a569bd)}.bar-fill.fc{background:linear-gradient(90deg,#117864,#1abc9c)}.bar-fill.comp{background:linear-gradient(90deg,#1b4f72,#2e86c1)}.bar-fill.comms{background:linear-gradient(90deg,#0e6655,#00b4d8)}.bar-fill.payload{background:linear-gradient(90deg,#b7410e,#e8731a)}.bar-fill.safety{background:linear-gradient(90deg,#6c3483,#af7ac5)}.bar-fill.wiring{background:linear-gradient(90deg,#1a5276,#5dade2)}.bar-fill.gcs{background:linear-gradient(90deg,#1a5276,#85c1e9)}.bar-fill.custom{background:linear-gradient(90deg,#b7410e,#ff8c38)}.bar-fill.tax{background:linear-gradient(90deg,#555,#888)}.bar-fill.contingency{background:linear-gradient(90deg,#7d6608,#f4d03f)}
+.callout{display:flex;align-items:baseline;gap:1rem;margin:2rem 0;flex-wrap:wrap}
+.callout .big{font-family:var(--font-mono);font-size:3rem;font-weight:700;color:var(--accent)}
+.callout .context{font-size:1.1rem;color:var(--grey-light)}
+.sys-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-top:2rem}
+.sys-item{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.5rem;display:flex;align-items:flex-start;gap:1rem}
+.sys-num{font-family:var(--font-mono);font-size:.72rem;color:var(--teal);background:rgba(0,180,216,0.1);border-radius:4px;padding:.2rem .5rem;flex-shrink:0}
+.sys-item h4{font-size:.92rem;color:var(--white);margin-bottom:.25rem}
+.sys-item p{font-size:.78rem;color:var(--grey);line-height:1.5}
+.scale-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;margin-top:2.5rem}
+.scale-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:2rem;text-align:center;transition:all .3s}
+.scale-card:hover{border-color:var(--teal);transform:translateY(-3px)}
+.scale-card .sc-units{font-family:var(--font-mono);font-size:2.5rem;color:var(--teal);font-weight:700}
+.scale-card .sc-label{font-size:.7rem;color:var(--grey);text-transform:uppercase;letter-spacing:2px;margin:.5rem 0 1rem}
+.scale-card .sc-cogs{font-family:var(--font-mono);font-size:.95rem;color:var(--grey);text-decoration:line-through;text-decoration-color:rgba(255,255,255,0.2)}
+.scale-card .sc-msrp{font-family:var(--font-mono);font-size:1.8rem;color:var(--white);font-weight:700;margin-top:.4rem}
+.scale-card .sc-margin{font-family:var(--font-mono);font-size:.8rem;color:var(--teal);margin-top:.4rem;font-weight:700}
+.scale-card .sc-sub{font-size:.75rem;color:var(--grey);margin-top:.3rem}
+.scale-card .sc-saving{font-family:var(--font-mono);font-size:.8rem;color:var(--accent);margin-top:.8rem;font-weight:700}
+.timeline{position:relative;margin-top:2.5rem;padding-left:2.5rem}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--teal),var(--accent),var(--teal))}
+.tl-item{position:relative;margin-bottom:2.5rem}
+.tl-item::before{content:'';position:absolute;left:-2.5rem;top:6px;width:18px;height:18px;border-radius:50%;border:2px solid var(--teal);background:var(--navy);z-index:1}
+.tl-item.active::before{background:var(--teal);box-shadow:0 0 12px rgba(0,180,216,0.4)}
+.tl-item .tl-period{font-family:var(--font-mono);font-size:.72rem;color:var(--teal);letter-spacing:2px;text-transform:uppercase}
+.tl-item .tl-title{font-size:1.15rem;font-weight:700;margin:.3rem 0;color:var(--white)}
+.tl-item .tl-desc{font-size:.88rem;color:var(--grey);line-height:1.7}
+.phase-tag{display:inline-block;font-family:var(--font-mono);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;padding:.25rem .75rem;border-radius:4px;margin-right:.5rem}
+.phase-tag.now{background:rgba(0,180,216,0.15);color:var(--teal)}
+.phase-tag.next{background:rgba(232,115,26,0.15);color:var(--accent)}
+.phase-tag.future{background:rgba(136,153,170,0.15);color:var(--grey)}
+.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:2rem;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.compare-col{padding:2rem}
+.compare-col.them{background:rgba(200,50,50,0.06)}
+.compare-col.us{background:rgba(0,180,216,0.06)}
+.compare-col h3{font-family:var(--font-mono);font-size:.75rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:1.5rem}
+.compare-col.them h3{color:var(--grey)}
+.compare-col.us h3{color:var(--teal)}
+.compare-item{margin-bottom:1.3rem}
+.compare-item .ci-label{font-size:.75rem;color:var(--grey);text-transform:uppercase;letter-spacing:1px;margin-bottom:.3rem}
+.compare-item .ci-value{font-size:1rem;font-weight:600}
+.compare-col.them .ci-value{color:var(--grey-light)}
+.compare-col.us .ci-value{color:var(--white)}
+.flywheel{display:flex;align-items:center;justify-content:center;gap:1rem;margin-top:3rem;flex-wrap:wrap}
+.fw-step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem 2rem;text-align:center;width:200px}
+.fw-step .fw-icon{font-size:2rem;margin-bottom:.5rem}
+.fw-step h4{font-size:.9rem;color:var(--white);margin-bottom:.3rem}
+.fw-step p{font-size:.75rem;color:var(--grey)}
+.fw-arrow{font-size:1.5rem;color:var(--teal)}
+.cta-section{text-align:center;padding:6rem 3rem}
+.cta-section .section-title{max-width:800px;margin:0 auto 1.5rem}
+.cta-box{display:inline-flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;justify-content:center}
+.cta-btn{display:inline-block;padding:1rem 2.5rem;border-radius:8px;font-family:var(--font-mono);font-size:.8rem;letter-spacing:2px;text-transform:uppercase;text-decoration:none;transition:all .3s;font-weight:700}
+.cta-btn.primary{background:var(--teal);color:var(--navy)}
+.cta-btn.primary:hover{background:var(--accent-glow);transform:translateY(-2px);box-shadow:0 8px 30px rgba(232,115,26,0.3)}
+.cta-btn.secondary{border:1px solid var(--border);color:var(--grey-light)}
+.cta-btn.secondary:hover{border-color:var(--teal);color:var(--teal)}
+footer{text-align:center;padding:3rem;border-top:1px solid var(--border)}
+footer p{font-size:.75rem;color:var(--grey);font-family:var(--font-mono);letter-spacing:1px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(10px)}}
+.reveal{opacity:0;transform:translateY(30px);transition:all .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+@media(max-width:900px){nav{padding:.8rem 1.5rem}.nav-links{gap:1rem}.nav-links a{font-size:.65rem}section{padding:4rem 1.5rem}.card-grid{grid-template-columns:1fr}.compare-grid{grid-template-columns:1fr}.scale-grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:2.8rem}.hero-stats{gap:1.5rem}}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-logo">VOLAR MARINE SYSTEMS</div>
+  <div class="nav-links">
+    <a href="#mission">Mission</a>
+    <a href="#platform">Platform</a>
+    <a href="#systems">Systems</a>
+    <a href="#budget">Budget</a>
+    <a href="#scale">Scale</a>
+    <a href="#advantage">Advantage</a>
+    <a href="#timeline">Timeline</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Canadian Autonomous Maritime Systems</div>
+  <h1>The <em>MK-1</em> USV</h1>
+  <p class="hero-sub">A hybrid range-extended surveillance and patrol unmanned surface vessel. Remote-operated today. Training the AI for autonomous operations tomorrow.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="num">13ft</div><div class="label">Hull Length</div></div>
+    <div class="hero-stat"><div class="num">30kW</div><div class="label">Dual Electric</div></div>
+    <div class="hero-stat"><div class="num">12+ hrs</div><div class="label">With Genset</div></div>
+    <div class="hero-stat"><div class="num">30x</div><div class="label">Optical Zoom</div></div>
+    <div class="hero-stat"><div class="num">$31.9K</div><div class="label">MSRP at Volume</div></div>
+    <div class="hero-stat"><div class="num">63%+</div><div class="label">Gross Margin</div></div>
+  </div>
+  <div class="scroll-hint"><span></span></div>
+</div>
+
+<section id="mission">
+  <div class="reveal">
+    <span class="section-tag">01 — Mission</span>
+    <h2 class="section-title">Surveillance and patrol <em>that works now</em></h2>
+    <p class="section-body">The MK-1 is a working ISR (Intelligence, Surveillance, Reconnaissance) asset that delivers persistent maritime patrol capability under remote operator control over LTE/5G. It doesn't wait for autonomy to be useful. It patrols harbours, monitors waterways, inspects infrastructure, and surveys the environment — today.</p>
+    <p class="section-body">While conducting real patrol missions, the MK-1 continuously records every sensor feed, every operator decision, and every environmental condition. This operational dataset — generated as a natural byproduct of real missions — is the training corpus for a separate autonomous AI program. The MK-1 builds the dataset that makes the autonomous USV possible.</p>
+  </div>
+  <div class="card-grid reveal">
+    <div class="card"><div class="card-icon">🛡️</div><h3>Harbour & Port Security</h3><p>Persistent patrol of port facilities, anchorages, and approaches. 30x optical zoom and thermal imaging for vessel identification day and night.</p><span class="card-tag">Defence / Security</span></div>
+    <div class="card"><div class="card-icon">🌊</div><h3>Waterway Monitoring</h3><p>River, lake, and coastal surveillance for environmental agencies. Monitor water conditions, wildlife activity, and illegal dumping.</p><span class="card-tag">Environment / DFO</span></div>
+    <div class="card"><div class="card-icon">🏗️</div><h3>Infrastructure Inspection</h3><p>Bridge pilings, dam faces, pipeline crossings, and shoreline erosion. Close-range thermal and optical inspection without manned vessels.</p><span class="card-tag">Utilities / Transport</span></div>
+    <div class="card"><div class="card-icon">🧠</div><h3>AI Training Data Generation</h3><p>Every patrol generates synchronized video, thermal, GPS, IMU, and motor telemetry. This real-world operational data trains the autonomous USV of tomorrow.</p><span class="card-tag">Future Autonomy</span></div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="platform">
+  <div class="reveal">
+    <span class="section-tag">02 — Platform</span>
+    <h2 class="section-title">Built for the <em>real world</em></h2>
+    <p class="section-body">The MK-1 is a 13-foot hybrid electric USV with a DC generator range extender. Dual azimuth stern drive pods provide 360-degree maneuverability. A 4-sensor EO/IR gimbal delivers surveillance-grade imagery. And the entire vessel is remotely operated over LTE/5G from any location with cellular coverage.</p>
+  </div>
+  <table class="spec-table reveal">
+    <thead><tr><th>Specification</th><th>Detail</th></tr></thead>
+    <tbody>
+      <tr><td class="label">Hull</td><td class="value">13ft fiberglass, foam-core unsinkable (Boston Whaler 130 SS)</td></tr>
+      <tr><td class="label">All-up weight</td><td class="value">~350 kg (with genset and fuel)</td></tr>
+      <tr><td class="label">Propulsion</td><td class="value">2x 15kW BLDC electric motors in custom ASD pods, 360 deg steering</td></tr>
+      <tr><td class="label">Battery</td><td class="value">2x 51.2V 100Ah LiFePO4 (10.24 kWh total), prebuilt server rack packs</td></tr>
+      <tr><td class="label">Range extender</td><td class="value">DC generator (V5 AutoGen 48V or Honda GX390 + alternator)</td></tr>
+      <tr><td class="label">Cruise speed</td><td class="value highlight">~16 knots</td></tr>
+      <tr><td class="label">Endurance</td><td class="value highlight">~4 hrs battery only / 12+ hrs with genset</td></tr>
+      <tr><td class="label">EO/IR payload</td><td class="value">SIYI ZT30: 30x optical zoom, 640x512 thermal, 1200m LRF, wide cam</td></tr>
+      <tr><td class="label">Autonomy</td><td class="value">None (V1) — remote operated by human operator over LTE</td></tr>
+      <tr><td class="label">Communications</td><td class="value">LTE/5G only (Sierra Wireless RV55, dual SIM, encrypted VPN tunnel)</td></tr>
+      <tr><td class="label">Navigation</td><td class="value">Dual RTK GNSS with moving baseline heading (compass-free)</td></tr>
+      <tr><td class="label">Flight controller</td><td class="value">Cube Orange+ running ArduPilot Rover/Boat</td></tr>
+      <tr><td class="label">Companion computer</td><td class="value">NVIDIA Jetson Orin Nano 8GB — video pipeline + data recording</td></tr>
+      <tr><td class="label">Data recording</td><td class="value">ROS2 rosbag (all topics), H.265 video, ArduPilot logs, synchronized timestamps</td></tr>
+      <tr><td class="label">Operating environment</td><td class="value">Freshwater: lakes, rivers, St. Lawrence</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="systems">
+  <div class="reveal">
+    <span class="section-tag">03 — Systems Architecture</span>
+    <h2 class="section-title">11 integrated <em>subsystems</em></h2>
+    <p class="section-body">Every component is specified, sourced, and documented in a complete build manual with part numbers, costs, interfaces, and assembly instructions.</p>
+  </div>
+  <div class="sys-grid reveal">
+    <div class="sys-item"><span class="sys-num">01</span><div><h4>Hull & Structure</h4><p>Foam-core fiberglass, marine plywood reinforcement, magnesium anodes, sensor mast, shock-isolated gimbal mount</p></div></div>
+    <div class="sys-item"><span class="sys-num">02</span><div><h4>Propulsion (ASD)</h4><p>Dual Flipsky 65161 motors, custom 360 deg azimuth stern drive pods, counter-rotating folding props, VESC 100/250 controllers</p></div></div>
+    <div class="sys-item"><span class="sys-num">03</span><div><h4>Power System</h4><p>2x 51.2V 100Ah LiFePO4 packs, DC generator hybrid, F16 relay module for full digital switching, pre-charge circuit</p></div></div>
+    <div class="sys-item"><span class="sys-num">04</span><div><h4>Flight Controller</h4><p>Cube Orange+, ArduPilot Rover/Boat, dual ZED-F9P RTK GPS with moving baseline heading</p></div></div>
+    <div class="sys-item"><span class="sys-num">05</span><div><h4>Companion Computer</h4><p>Jetson Orin Nano 8GB, ROS2 Humble, MAVROS, GStreamer video pipeline, rosbag recording</p></div></div>
+    <div class="sys-item"><span class="sys-num">06</span><div><h4>Communications</h4><p>Sierra Wireless RV55 LTE-A, dual SIM, 4x4 MIMO antenna, OpenVPN encrypted tunnel</p></div></div>
+    <div class="sys-item"><span class="sys-num">07</span><div><h4>EO/IR Payload</h4><p>SIYI ZT30 4-sensor gimbal on wire rope shock isolators, MAVLink control, RTSP video output</p></div></div>
+    <div class="sys-item"><span class="sys-num">08</span><div><h4>Safety & Recovery</h4><p>RF kill switch, standalone GPS tracker, AIS transponder, COLREGS nav lights, bilge pump</p></div></div>
+    <div class="sys-item"><span class="sys-num">09</span><div><h4>Wiring & Interconnects</h4><p>Marine-grade tinned copper, Deutsch DT sealed connectors, shielded signal cable, DIN rail distribution</p></div></div>
+    <div class="sys-item"><span class="sys-num">10</span><div><h4>Ground Control</h4><p>QGroundControl over LTE, RC transmitter for safety pilot override, bench test equipment</p></div></div>
+    <div class="sys-item"><span class="sys-num">11</span><div><h4>Custom Parts</h4><p>Outsourced CAD design + CNC fabrication: ASD pods, azimuth gear sets, genset bed, wiring harness</p></div></div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<div class="feature-band" id="budget">
+  <div class="inner">
+    <div class="reveal">
+      <span class="section-tag">04 — Prototype Budget</span>
+      <h2 class="section-title">Honest numbers. <em>All-in.</em></h2>
+      <p class="section-body">The prototype budget includes parts, Quebec taxes (14.975%), shipping, consumables, and a 15% contingency for the inevitable surprises every hardware build encounters.</p>
+    </div>
+    <div class="callout reveal">
+      <span class="big">$42,486</span>
+      <span class="context">CAD all-in prototype cost — parts ($32,238) + taxes ($3,862) + shipping ($1,100) + consumables ($450) + 15% contingency ($4,836)</span>
+    </div>
+    <div class="reveal" style="margin-top:2rem">
+      <div class="budget-bar"><span class="bar-label">Custom Design+Fab</span><div class="bar-track"><div class="bar-fill custom" style="width:21.6%">$6,974</div></div></div>
+      <div class="budget-bar"><span class="bar-label">EO/IR Payload</span><div class="bar-track"><div class="bar-fill payload" style="width:20.4%">$6,570</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Power System</span><div class="bar-track"><div class="bar-fill power" style="width:17.6%">$5,663</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Contingency 15%</span><div class="bar-track"><div class="bar-fill contingency" style="width:15%">$4,836</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Taxes 14.975%</span><div class="bar-track"><div class="bar-fill tax" style="width:12%">$3,862</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Hull & Structure</span><div class="bar-track"><div class="bar-fill hull" style="width:9.7%">$3,127</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Propulsion (ASD)</span><div class="bar-track"><div class="bar-fill prop" style="width:7.5%">$2,406</div></div></div>
+      <div class="budget-bar"><span class="bar-label">FC & Navigation</span><div class="bar-track"><div class="bar-fill fc" style="width:4%">$1,295</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Shipping</span><div class="bar-track"><div class="bar-fill tax" style="width:3.4%">$1,100</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Companion PC</span><div class="bar-track"><div class="bar-fill comp" style="width:2.2%">$708</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Communications</span><div class="bar-track"><div class="bar-fill comms" style="width:2.1%">$690</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Safety & Recovery</span><div class="bar-track"><div class="bar-fill safety" style="width:1.9%">$615</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Consumables</span><div class="bar-track"><div class="bar-fill tax" style="width:1.4%">$450</div></div></div>
+      <div class="budget-bar"><span class="bar-label">GCS & Test</span><div class="bar-track"><div class="bar-fill gcs" style="width:1.3%">$430</div></div></div>
+      <div class="budget-bar"><span class="bar-label">Wiring</span><div class="bar-track"><div class="bar-fill wiring" style="width:.8%">$260</div></div></div>
+    </div>
+  </div>
+</div>
+
+<section id="scale">
+  <div class="reveal">
+    <span class="section-tag">05 — Economies of Scale</span>
+    <h2 class="section-title">COGS down 72%. <em>Margins above 63%.</em></h2>
+    <p class="section-body">Volume purchasing, production tooling, and assembly line efficiency drive COGS down from $42K prototype to under $12K at full-rate production. With MSRP set at consistent 63%+ gross margins, the MK-1 remains priced far below every competitor at every tier.</p>
+  </div>
+  <div class="scale-grid reveal">
+    <div class="scale-card">
+      <div class="sc-units">10</div>
+      <div class="sc-label">Pilot Batch</div>
+      <div class="sc-cogs">COGS $27,413</div>
+      <div class="sc-msrp">$74,900</div>
+      <div class="sc-margin">63.4% gross margin</div>
+      <div class="sc-sub">$474K gross profit on batch</div>
+      <div class="sc-saving">COGS ↓ 35% vs prototype</div>
+    </div>
+    <div class="scale-card">
+      <div class="sc-units">100</div>
+      <div class="sc-label">Low-Rate Production</div>
+      <div class="sc-cogs">COGS $19,320</div>
+      <div class="sc-msrp">$52,900</div>
+      <div class="sc-margin">63.5% gross margin</div>
+      <div class="sc-sub">$3.36M gross profit on run</div>
+      <div class="sc-saving">COGS ↓ 55% vs prototype</div>
+    </div>
+    <div class="scale-card">
+      <div class="sc-units">550</div>
+      <div class="sc-label">Medium-Rate</div>
+      <div class="sc-cogs">COGS $13,931</div>
+      <div class="sc-msrp">$37,900</div>
+      <div class="sc-margin">63.2% gross margin</div>
+      <div class="sc-sub">$13.2M gross profit on run</div>
+      <div class="sc-saving">COGS ↓ 67% vs prototype</div>
+    </div>
+    <div class="scale-card">
+      <div class="sc-units">1,000</div>
+      <div class="sc-label">Full-Rate Production</div>
+      <div class="sc-cogs">COGS $11,706</div>
+      <div class="sc-msrp">$31,900</div>
+      <div class="sc-margin">63.3% gross margin</div>
+      <div class="sc-sub">$20.2M gross profit on run</div>
+      <div class="sc-saving">COGS ↓ 72% vs prototype</div>
+    </div>
+  </div>
+  <div class="callout reveal" style="margin-top:3rem">
+    <span class="big">$58.8M</span>
+    <span class="context">cumulative revenue across all production tiers at MSRP — $37.2M gross profit at 63%+ margins</span>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section>
+  <div class="reveal">
+    <span class="section-tag">06 — The AI Flywheel</span>
+    <h2 class="section-title">Every patrol builds the <em>autonomous future</em></h2>
+    <p class="section-body">The MK-1 is a surveillance vessel that generates AI training data as a byproduct of real operations. The more vessels deployed, the more data collected, the better the autonomous model becomes, the more valuable the platform, the more vessels deployed.</p>
+  </div>
+  <div class="flywheel reveal">
+    <div class="fw-step"><div class="fw-icon">🚤</div><h4>MK-1 Patrols</h4><p>Real surveillance missions under operator control</p></div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-step"><div class="fw-icon">💾</div><h4>Data Recorded</h4><p>Video, thermal, GPS, IMU, motor telemetry, operator decisions</p></div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-step"><div class="fw-icon">🧠</div><h4>AI Trained</h4><p>Neural network learns from real operational data</p></div>
+    <div class="fw-arrow">→</div>
+    <div class="fw-step"><div class="fw-icon">🤖</div><h4>Autonomous USV</h4><p>Future product powered by fleet-scale training data</p></div>
+  </div>
+  <div class="reveal" style="margin-top:2rem">
+    <p class="section-body">At 550 deployed units conducting daily 6-hour patrols, that's 3,300 vessel-hours of training data per day across diverse waterways, weather conditions, and operational scenarios. No competitor has access to this volume of real-world operational data.</p>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="advantage">
+  <div class="reveal">
+    <span class="section-tag">07 — Competitive Advantage</span>
+    <h2 class="section-title">How we're <em>different</em></h2>
+    <p class="section-body">The autonomous USV market is dominated by well-funded US companies building autonomy first and products second. VOLAR builds a working product first and autonomy from real-world data second.</p>
+  </div>
+  <div class="compare-grid reveal">
+    <div class="compare-col them">
+      <h3>Industry Standard</h3>
+      <div class="compare-item"><div class="ci-label">MSRP per unit</div><div class="ci-value">$129K – $2M+</div></div>
+      <div class="compare-item"><div class="ci-label">Revenue starts</div><div class="ci-value">After autonomy proven (years)</div></div>
+      <div class="compare-item"><div class="ci-label">Capital raised</div><div class="ci-value">$30M – $345M+</div></div>
+      <div class="compare-item"><div class="ci-label">Approach</div><div class="ci-value">Build autonomy first, sell later</div></div>
+      <div class="compare-item"><div class="ci-label">AI training data</div><div class="ci-value">Simulation + controlled tests</div></div>
+      <div class="compare-item"><div class="ci-label">Canadian presence</div><div class="ci-value">None in this class</div></div>
+      <div class="compare-item"><div class="ci-label">Team</div><div class="ci-value">200+ employees, VC-backed</div></div>
+    </div>
+    <div class="compare-col us">
+      <h3>VOLAR MK-1</h3>
+      <div class="compare-item"><div class="ci-label">MSRP per unit</div><div class="ci-value" style="color:var(--teal)">$74.9K (10 units) → $31.9K (1,000 units)</div></div>
+      <div class="compare-item"><div class="ci-label">Revenue starts</div><div class="ci-value" style="color:var(--teal)">At first deployment</div></div>
+      <div class="compare-item"><div class="ci-label">Capital needed</div><div class="ci-value" style="color:var(--teal)">$43K prototype (non-dilutive grants)</div></div>
+      <div class="compare-item"><div class="ci-label">Approach</div><div class="ci-value" style="color:var(--teal)">Sell surveillance now, build AI from operational data</div></div>
+      <div class="compare-item"><div class="ci-label">AI training data</div><div class="ci-value" style="color:var(--teal)">Real patrol missions, fleet-scale</div></div>
+      <div class="compare-item"><div class="ci-label">Canadian presence</div><div class="ci-value" style="color:var(--teal)">Designed, built, operated in Canada</div></div>
+      <div class="compare-item"><div class="ci-label">Gross margin</div><div class="ci-value" style="color:var(--teal)">63%+ at all production tiers</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section id="timeline">
+  <div class="reveal">
+    <span class="section-tag">08 — Roadmap</span>
+    <h2 class="section-title">From incorporation to <em>operational patrol</em></h2>
+  </div>
+  <div class="timeline reveal">
+    <div class="tl-item active"><div class="tl-period"><span class="phase-tag now">Now</span> Weeks 1–2</div><div class="tl-title">Incorporate & Apply for Funding</div><div class="tl-desc">Federal incorporation. Apply to NRC IRAP, Centech, District 3, PME MTL. Build pitch materials, concept video, website. Total cash outlay: $200.</div></div>
+    <div class="tl-item active"><div class="tl-period"><span class="phase-tag now">Now</span> Weeks 3–8</div><div class="tl-title">Build Position at Zero Cost</div><div class="tl-desc">LinkedIn engagement, university outreach, machine shop scouting, hull shopping, COVE introduction, IRAP ITA meetings. All free.</div></div>
+    <div class="tl-item"><div class="tl-period"><span class="phase-tag next">Funded</span> Weeks 8–12</div><div class="tl-title">Funding Secured — Build Begins</div><div class="tl-desc">IRAP contribution agreement signed. Hull acquired. Mechanical designer engaged. Machine shop deposit paid. Physical build starts.</div></div>
+    <div class="tl-item"><div class="tl-period"><span class="phase-tag next">Build</span> Weeks 12–20</div><div class="tl-title">Hull, Power, Propulsion</div><div class="tl-desc">Hull prep, battery install, DC generator mounted, ASD pods fabricated and installed. The MK-1 moves under its own power.</div></div>
+    <div class="tl-item"><div class="tl-period"><span class="phase-tag next">Build</span> Weeks 20–24</div><div class="tl-title">Electronics, Sensors, Comms</div><div class="tl-desc">Cube Orange+ FC, dual GPS, Jetson Orin Nano, SIYI ZT30 gimbal, LTE gateway. Full system integration. Live video streaming over LTE.</div></div>
+    <div class="tl-item"><div class="tl-period"><span class="phase-tag next">Validate</span> Weeks 24–28</div><div class="tl-title">Water Trials</div><div class="tl-desc">Dock test, calm water patrol, extended genset run, data quality validation. Safety pilot on chase boat. Full demo video recorded.</div></div>
+    <div class="tl-item"><div class="tl-period"><span class="phase-tag future">Revenue</span> Week 28+</div><div class="tl-title">Operational — First Patrol Contracts</div><div class="tl-desc">Demo video published. IDEaS application submitted. First paid patrol contracts. SR&ED claim filed. AI co-founder search begins.</div></div>
+  </div>
+</section>
+
+<div class="divider"><hr></div>
+
+<section>
+  <div class="reveal">
+    <span class="section-tag">09 — Canadian Advantage</span>
+    <h2 class="section-title">Built in <em>Canada</em>, for Canadian waters</h2>
+    <p class="section-body">There is no Canadian manufacturer of surveillance USVs in this class. Every competitor is American. The MK-1 is designed, built, and operated in Montreal, Quebec — eligible for every Canadian innovation and defence funding program.</p>
+  </div>
+  <div class="card-grid reveal">
+    <div class="card"><div class="card-icon">🍁</div><h3>NRC IRAP</h3><p>Non-repayable R&D contributions for technology development. $50K-$150K for prototype build.</p></div>
+    <div class="card"><div class="card-icon">🔬</div><h3>SR&ED Tax Credit</h3><p>35% refundable tax credit on eligible R&D expenditures. ~$12K back on the prototype build alone.</p></div>
+    <div class="card"><div class="card-icon">⚓</div><h3>IDEaS / DND</h3><p>Innovation for Defence Excellence. Competitive projects up to $1.2M. Perfect fit for maritime ISR.</p></div>
+    <div class="card"><div class="card-icon">🌐</div><h3>BOREALIS / COVE</h3><p>Defence innovation consortium. Access to test facilities, Navy partners, and procurement pathways.</p></div>
+    <div class="card"><div class="card-icon">🏭</div><h3>Investissement Quebec</h3><p>Provincial SME support: IMPULSION PME, ESSOR, CRIC 2026. Startup loans and grants.</p></div>
+    <div class="card"><div class="card-icon">🎓</div><h3>Montreal AI Ecosystem</h3><p>Home to Mila, one of the world's leading AI institutes. ETS and McGill robotics labs. Future AI talent pipeline.</p></div>
+  </div>
+</section>
+
+<section class="cta-section" id="contact">
+  <div class="reveal">
+    <span class="section-tag">Let's Talk</span>
+    <h2 class="section-title">The MK-1 delivers ISR capability <em>now</em>, generates revenue <em>now</em>, and builds the autonomous future — at 63% gross margins and a fraction of the competition's price.</h2>
+    <p class="section-body" style="max-width:600px;margin:0 auto">VOLAR Marine Systems is seeking funding partners, government collaborators, and early customers for the MK-1 surveillance and patrol USV.</p>
+    <div class="cta-box">
+      <a href="mailto:contact@volarmarine.com" class="cta-btn primary">Get in Touch</a>
+      <a href="#mission" class="cta-btn secondary">Back to Top</a>
+    </div>
+    <p style="margin-top:3rem;font-family:var(--font-mono);font-size:.7rem;color:var(--grey);letter-spacing:2px">MONTREAL, QUEBEC, CANADA</p>
+  </div>
+</section>
+
+<footer>
+  <p>VOLAR MARINE SYSTEMS — CONFIDENTIAL — MARCH 2026</p>
+  <p style="margin-top:.5rem;color:var(--grey)">Vessel-Optimized Lift, Autonomy & Robotics</p>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',window.scrollY>50)});
+const reveals=document.querySelectorAll('.reveal');
+const observer=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('visible')}})},{threshold:0.1,rootMargin:'0px 0px -50px 0px'});
+reveals.forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
